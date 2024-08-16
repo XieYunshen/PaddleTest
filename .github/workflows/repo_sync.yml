@@ -14,11 +14,11 @@ jobs:
         repository: PaddlePaddle/PaddleClas
         ref: develop
         submodules: recursive
-    - name: Upload Code
-      uses: conda-incubator/setup-miniconda@v3
+    - uses: conda-incubator/setup-miniconda@v3
       with:
         auto-activate-base: true
         activate-environment: ""
+    - name: Upload Code
       env:
         AK: ${{ secrets.BOS_AK }}
         SK: ${{ secrets.BOS_SK }}
