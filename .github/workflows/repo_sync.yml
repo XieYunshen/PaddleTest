@@ -1,7 +1,10 @@
 name: PaddleClas Sync
 run-name: PaddleClas Develop Sync
 on:
-  [ workflow_dispatch, repository_dispatch ]
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - custom-event
 jobs:
   paddleqa-checkout:
    runs-on: ubuntu-latest
