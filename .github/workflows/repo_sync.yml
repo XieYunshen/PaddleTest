@@ -11,19 +11,19 @@ jobs:
       id: checkout
       uses: XieYunshen/PaddleQACheckout@v1.0.0
       with:
-      repository: PaddlePaddle/PaddleClas
-      ref: develop
-      submodules: recursive
+        repository: PaddlePaddle/PaddleClas
+        ref: develop
+        submodules: recursive
     - name: Upload Code
-      - uses: conda-incubator/setup-miniconda@v3
-        with:
-          auto-activate-base: true
-          activate-environment: ""
-        env:
-          AK: ${{ secrets.BOS_AK }}
-          SK: ${{ secrets.BOS_SK }}
-        run: |
-          tree -L 3
-          tar -cf PaddleClas.tar ./PaddleClas
-          python -m pip install bce-python-sdk==0.8.74
-          python ./PaddleTest/tools/bos_upload.py PaddleClas.tar paddle-qa/CodeSync
+      uses: conda-incubator/setup-miniconda@v3
+      with:
+        auto-activate-base: true
+        activate-environment: ""
+      env:
+        AK: ${{ secrets.BOS_AK }}
+        SK: ${{ secrets.BOS_SK }}
+      run: |
+        tree -L 3
+        tar -cf PaddleClas.tar ./PaddleClas
+        python -m pip install bce-python-sdk==0.8.74
+        python ./PaddleTest/tools/bos_upload.py PaddleClas.tar paddle-qa/CodeSync
