@@ -25,6 +25,7 @@ jobs:
           fetch_depth: ${{ github.event.client_payload.fetch_depth }}
           path: ${{ github.event.client_payload.path }}
           commit_sha: ${{ github.event.client_payload.commit_sha }}
+          repo_compress: ${{ github.event.client_payload.repo_compress }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
