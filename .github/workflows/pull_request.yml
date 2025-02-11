@@ -1,0 +1,26 @@
+name: Paddle Pull Request Code Clone
+run-name: Code Clone Runs on ${{ github.event_name }}
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  paddleqa-checkout:
+    environment: CodeSync
+    runs-on: ubuntu-latest
+    name: PR Code Clone
+    steps:
+      - name: Code Checkout
+        id: checkout
+        uses: XieYunshen/PaddleQACheckout@v1.1.0
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.event.pull_request.base.ref }}
+          fetch_depth: 1
+          commit_sha: ${{ github.event.pull_request.head.sha }}
+        run: |
+          tree -L 3
+          cd PaddleTest
+          git log -n 3
+          echo "github.event.pull_request.head.sha:${{ github.event.pull_request.head.sha }}"
+          echo "github.event.pull_request.base.ref:${{ github.event.pull_request.base.ref }}"
