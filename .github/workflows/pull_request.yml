@@ -6,7 +6,6 @@ on:
 
 jobs:
   paddleqa-checkout:
-    environment: CodeSync
     runs-on: ubuntu-latest
     name: PR Code Clone
     steps:
