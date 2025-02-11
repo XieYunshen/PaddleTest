@@ -22,7 +22,7 @@ jobs:
           repository: ${{ github.repository }}
           ref: ${{ github.event.pull_request.head.sha }}
           fetch_depth: 1
-          branch_name: "PR${{ github.event.pull_request.number }}""
+          branch_name: PR${{ github.event.pull_request.number }}
       - name: Upload Code
         run: |
           tree -L 3
