@@ -9,14 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     name: PR Code Clone
     steps:
-      - name: Code Checkout
-        id: checkout
-        uses: XieYunshen/PaddleQACheckout@v1.1.0
-        with:
-          repository: ${{ github.repository }}
-          ref: ${{ github.event.pull_request.base.ref }}
-          fetch_depth: 1
-          commit_sha: ${{ github.event.pull_request.head.sha }}
+      # - name: Code Checkout
+      #   id: checkout
+      #   uses: XieYunshen/PaddleQACheckout@v1.1.0
+      #   with:
+      #     repository: ${{ github.repository }}
+      #     ref: ${{ github.event.pull_request.base.ref }}
+      #     fetch_depth: 1
+      #     commit_sha: ${{ github.event.pull_request.head.sha }}
       - name: Upload Code
         run: |
           tree -L 3
