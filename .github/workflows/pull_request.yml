@@ -1,0 +1,31 @@
+name: Paddle Pull Request Code Clone
+run-name: Code Clone Runs on ${{ github.event_name }}
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  paddleqa-checkout:
+    runs-on: ubuntu-latest
+    name: PR Code Clone
+    steps:
+      - name: Information Show
+        run: |
+          echo "github.event.pull_request.head.sha:${{ github.event.pull_request.head.sha }}"
+          echo "github.event.pull_request.base.ref:${{ github.event.pull_request.base.ref }}"
+          echo "github.event.pull_request.number:${{ github.event.pull_request.number }}"
+          echo "refs/pull/${{ github.event.pull_request.number }}/head"
+      - name: Code Checkout
+        id: checkout
+        uses: XieYunshen/PaddleQACheckout@pull_request_support
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch_depth: 1
+          branch_name: PR${{ github.event.pull_request.number }}
+      - name: Upload Code
+        run: |
+          tree -L 3
+          cd PaddleTest
+          git log -n 3
+          git branch
