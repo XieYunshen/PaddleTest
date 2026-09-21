@@ -36,29 +36,11 @@ jobs:
         run: |
           git log -n 3
           tree -L 3
-          current_commit=$(git rev-parse HEAD)
           REPO_NAME=${{ github.event.client_payload.repository }}
           REPO_NAME=${REPO_NAME##*/}
           file_name=$REPO_NAME.tar
-          cd ${{ github.event.client_payload.path }}
-          current_commit=$(git rev-parse HEAD)
-          current_commit_time=$(git show -s --format=%ct HEAD)
-          cd -
           tar -cf $REPO_NAME.tar ${{ github.event.client_payload.path }}
-          python -m pip install bce-python-sdk==0.8.74
-          # 获取远端的最新提交时间
-          latest_commit_time_remote=$(curl --silent --fail https://paddle-qa.bj.bcebos.com/CodeSync/GitInfo/${{ github.event.client_payload.repository }}/${{ github.event.client_payload.ref }}/${{ github.event.client_payload.commit_sha }}/latest_commit_time) || latest_commit_time_remote=0
-          # 判断 latest_commit_time_remote 是否晚于 current_commit_time 时间
-          if [ -n "$latest_commit_time_remote" ] && [ "$latest_commit_time_remote" -lt "$current_commit_time" ]; then
-            echo "Executing upload as latest commit time ($latest_commit_time_remote) is earlier than current commit time ($current_commit_time)."
-            python tools/bos_upload.py ${file_name} paddle-qa/CodeSync/${{ github.event.client_payload.ref }}/${{ github.event.client_payload.commit_sha }}
-            echo "Bos link: https://paddle-qa.bj.bcebos.com/CodeSync/${{ github.event.client_payload.ref }}/${{ github.event.client_payload.commit_sha }}/$file_name"
-            echo "${current_commit_time}" >> latest_commit_time
-            python tools/bos_upload.py latest_commit_time paddle-qa/CodeSync/GitInfo/${{ github.event.client_payload.repository }}/${{ github.event.client_payload.ref }}/${{ github.event.client_payload.commit_sha }}
-            echo "${current_commit}" >> latest_commit
-            python tools/bos_upload.py latest_commit paddle-qa/CodeSync/GitInfo/${{ github.event.client_payload.repository }}/${{ github.event.client_payload.ref }}/${{ github.event.client_payload.commit_sha }}
-            echo "GitInfo link: https://paddle-qa.bj.bcebos.com/CodeSync/GitInfo/${{ github.event.client_payload.repository }}/${{ github.event.client_payload.ref }}/${{ github.event.client_payload.commit_sha }}/latest_commit_sha"
-            echo "GitInfo link: https://paddle-qa.bj.bcebos.com/CodeSync/GitInfo/${{ github.event.client_payload.repository }}/${{ github.event.client_payload.ref }}/${{ github.event.client_payload.commit_sha }}/latest_commit_time"
-          else
-            echo "The latest commit time is later than the current commit. Skipping the commit operation."
-          fi
+          python -m pip install bce-python-sdk
+          echo "start upload..."
+          python tools/bos_tools.py ${file_name} paddle-qa/CodeSync/${{ github.event.client_payload.ref }}/${{ github.event.client_payload.commit_sha }}
+          echo "Bos link: https://paddle-qa.bj.bcebos.com/CodeSync/${{ github.event.client_payload.ref }}/${{ github.event.client_payload.commit_sha }}/$file_name"
